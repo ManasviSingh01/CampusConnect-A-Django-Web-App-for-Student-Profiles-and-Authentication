@@ -1,10 +1,4 @@
-# === Fully Working Django App: CampusConnect ===
-
-# === 1. SETTINGS.PY ===
-# In campusconnect/settings.py
-
 import os
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,9 +30,6 @@ LOGOUT_REDIRECT_URL = 'login'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# === 2. MODELS.PY ===
-# In users/models.py
-
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -51,9 +42,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
-
-# === 3. FORMS.PY ===
-# In users/forms.py
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -71,9 +59,6 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['course', 'semester', 'bio', 'profile_pic']
-
-# === 4. VIEWS.PY ===
-# In users/views.py
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -106,7 +91,7 @@ def profile(request):
         form = ProfileUpdateForm(instance=request.user.profile)
     return render(request, 'users/profile.html', {'form': form})
 
-# === 5. URLS.PY (APP) ===
+
 # In users/urls.py
 
 from django.urls import path
@@ -117,8 +102,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
 ]
-
-# === 6. URLS.PY (PROJECT) ===
 # In campusconnect/urls.py
 
 from django.contrib import admin
@@ -137,7 +120,7 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# === 7. TEMPLATES ===
+
 
 # templates/users/home.html
 <!DOCTYPE html>
@@ -171,7 +154,6 @@ if settings.DEBUG:
   <button type="submit">Update Profile</button>
 </form>
 
-# === 8. SIGNALS ===
 # In users/signals.py
 
 from django.db.models.signals import post_save
@@ -188,7 +170,6 @@ def create_profile(sender, instance, created, **kwargs):
 def save_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-# === 9. USERS/APP.PY ===
 # Ensure signals are loaded in users/apps.py
 
 from django.apps import AppConfig
@@ -200,12 +181,11 @@ class UsersConfig(AppConfig):
     def ready(self):
         import users.signals
 
-# === 10. INIT.PY ===
 # In users/__init__.py
 
 default_app_config = 'users.apps.UsersConfig'
 
-# === 11. Final Setup ===
+# === Final Setup ===
 # Run these in terminal:
 # $ python manage.py makemigrations
 # $ python manage.py migrate
